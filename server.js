@@ -11,12 +11,11 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-app.use(errorhandler());
 
 app.use('/api', apiRouter);
 
 
-
+app.use(errorhandler());
 
 
 

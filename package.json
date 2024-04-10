@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --require @babel/register"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +25,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "devDependencies": {
+    "@babel/register": "^7.23.7",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^9.1.3",
