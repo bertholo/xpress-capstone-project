@@ -12,3 +12,12 @@ db.serialize(() => {
         "`is_currently_employed` INTEGER NOT NULL DEFAULT 1, " +
         "PRIMARY KEY(`id`) )");
 });
+
+db.serialize(() => {
+    db.run('DROP TABLE IF EXISTS Series');
+    db.run('CREATE TABLE IF NOT EXISTS `Series` ( '+
+    '`id` INTEGER NOT NULL, '+
+    '`name` TEXT NOT NULL, '+
+    '`description` TEXT NOT NULL, '+
+    'primary key (`id`) ) ');
+});
