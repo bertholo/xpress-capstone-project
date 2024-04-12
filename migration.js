@@ -19,10 +19,11 @@ db.serialize(() => {
     '`id` INTEGER NOT NULL, '+
     '`name` TEXT NOT NULL, '+
     '`description` TEXT NOT NULL, '+
-    'primary key (`id`) ) ');
+    'PRIMARY KEY (`id`) ) ');
 });
 
-db.run('DROP TABLE IF EXISTS `Issue`');
+db.serialize(() => {
+    db.run('DROP TABLE IF EXISTS `Issue`');
     db.run("CREATE TABLE IF NOT EXISTS `Issue` ( " +
         "`id` INTEGER NOT NULL, " +
         "`name` TEXT NOT NULL, " +
@@ -33,3 +34,4 @@ db.run('DROP TABLE IF EXISTS `Issue`');
         "FOREIGN KEY (`artist_id`) REFERENCES `Artist` (`id`),"+
         "FOREIGN KEY (`series_id`) REFERENCES `Series` (`id`),"+
         "PRIMARY KEY(`id`) )");
+});
