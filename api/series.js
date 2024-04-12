@@ -1,18 +1,9 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database(process.env.TEST_DATABASE || './database.sqlite');
+const issuesRouter = require('./issues');
 
 const seriesRouter = express.Router();
-
-seriesRouter.get('/', (req, res, next) => {
-    db.all('SELECT * FROM Series', (err, series) => {
-        if(err){
-            next(err);
-        } else{
-            res.status(200).json({ series: series });
-        }
-    });
-});
 
 seriesRouter.param('seriesId', (req, res, next, seriesId) => {
     const sql = 'SELECT * FROM Series WHERE Series.id = $seriesId';
@@ -27,6 +18,18 @@ seriesRouter.param('seriesId', (req, res, next, seriesId) => {
             next();
         } else{
             res.sendStatus(404);
+        }
+    });
+});
+
+seriesRouter.use('/:seriesId/issues', issuesRouter);
+
+seriesRouter.get('/', (req, res, next) => {
+    db.all('SELECT * FROM Series', (err, series) => {
+        if(err){
+            next(err);
+        } else{
+            res.status(200).json({ series: series });
         }
     });
 });
@@ -77,6 +80,30 @@ seriesRouter.put('/:seriesId', (req, res, next) => {
             db.get(`SELECT * FROM Series WHERE Series.id = ${req.params.seriesId}`, (err, series) => {
                 res.status(200).json({series: series})
             })
+        }
+    });
+});
+
+seriesRouter.delete('/:seriesId', (req, res, next) => {
+    const issueSql = 'SELECT * FROM Issue WHERE Issue.series_id = $seriesId';
+    const issueValues = {$seriesId: req.params.seriesId};
+    db.get(issueSql, issueValues, (err, issue) => {
+        if(err) {
+            next(err);
+        } else {
+            if(issue){
+                res.sendStatus(400);
+            } else{
+                const sql = 'DELETE FROM Series WHERE Series.id = $seriesId';
+                const values = {$seriesId: req.params.seriesId};
+                db.run(sql, values, (err) => {
+                    if(err){
+                        next(err);
+                    } else{
+                        res.sendStatus(204);
+                    }
+                });
+            }
         }
     });
 });
