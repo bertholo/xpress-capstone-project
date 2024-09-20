@@ -12,7 +12,8 @@ The X-Press Publishing internal tool should allow users to:
 ## DEMO
 
 - Fork the repo
-   ```npm start
+   ```bash
+   npm start
 - Right click on index.html and click on start live server
 ### Database Table Properties
 
